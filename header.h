@@ -5,6 +5,7 @@
 //maybe make namespace
 
 //functions titles here
+//put constants here
 
 
 #endif
