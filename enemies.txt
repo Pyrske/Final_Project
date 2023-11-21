@@ -1,0 +1,30 @@
+Easy[
+    Slime{
+    Att 1
+    Def 2
+    HP 5
+    Loot 1 1
+      //money; % chance of random item
+    }
+    Zombie{
+    Att 3
+    Def 1
+    HP 10
+    Loot 5 5
+    }
+]
+Medium[
+    //enemies here
+]
+Hard[
+    //enemies here
+]
+Boss[
+    Slime King{
+    Att 10
+    Def 15
+    HP 50
+    Loot 100 10
+    }
+    //all bosses are guaranteed one item, random chance is for another one
+]

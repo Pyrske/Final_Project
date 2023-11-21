@@ -1,0 +1,15 @@
+#shop 1 1
+Sword 10
+Potion 5
+Item3 4
+Item4 15
+#shop 2 2
+Item1
+Item2
+Item3
+Item4
+Item5
+Item6
+Item7
+Item8
+Item9
