@@ -10,19 +10,19 @@
 #include <fstream>
 
 using namespace std;
-
-
+//functions made by -l:
 void makeShop();
 void removeShop();
 bool addMoney(const string& input);
 string findLocation(const string& input);
 void playerAction(const string& input);
 bool changeLocation(const string& input);
-int getShopLength();
+unsigned int getShopLength();
 void openShop();
 void buyItem();
 void removeShopItem(const string& itemName);
-unsigned int difficultyLine(const string& difficulty);
-void dungeon();
+void enterDungeon();
 void recordEnemies();
-void getEnemy(const string &difficulty);
+
+//functions made by -k:
+void startingText();

@@ -1,7 +1,9 @@
 #include "header.h"
+#include "functions.cpp"
 
 int main() {
     string userInput;
+    startingText();
     makeShop();
     recordEnemies();
     while (getline(cin, userInput)){
