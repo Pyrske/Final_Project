@@ -1,15 +1,31 @@
+//#shop indicates shop level; the first number is rows, the second is columns
+//the numbers after the item's name are:
+//cost, new max HP, new damage, new defense, healing points
 #shop 2 2
-Sword 10
-Potion 5
-Item3 4
-Item4 15
+Strong Dagger
+20 0 10
+Health Potion
+5 0 0 0 30
+Item3
+4
+Item4
+15
 #shop 3 3
-Sword 10
-Item2 1
-Item3 1
-Item4 1
-Item5 1
-Item6 1
-Item7 1
-Item8 1
-Item9 1
+Sword
+10
+Item2
+1
+Item3
+1
+Item4
+1
+Item5
+1
+Item6
+1
+Item7
+1
+Item8
+1
+Item9
+1

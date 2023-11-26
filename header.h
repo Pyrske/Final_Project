@@ -26,3 +26,4 @@ void recordEnemies();
 
 //functions made by -k:
 void startingText();
+void playerStats();
