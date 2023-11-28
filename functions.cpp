@@ -155,6 +155,7 @@ void openShop() { //-l
             for (int currentCol=0; currentCol < columns; currentCol++) { //for the size of the shop print out appropriate names and spaces in the console modified by -k
                 getline(getShopItem, name);//gets next shop item from file -l
                 getline(getShopItem, line);//gets next shop item from file -l
+                if (name=="#eof" || line=="#eof") return;//prevents endless loop of item costs -l
                 stringstream costLine(line); //-l
                 costLine >> cost;//splits line into name and cost -l
                 cout << setw(20); //-l modified by -k
@@ -223,12 +224,31 @@ void buyItem(){ //-l
         cout << "This item does not exist\n"; //-k
 }
 
+void expandShop(){ //expands shop if all previous items are bought out -l
+    ifstream getShopItem(shopFile);
+    string line,name,pass;
+    int row,col,itemCount;
+    for (int shopCount=0; shopCount<=currentShopLevel; shopCount++){//copied from "openShop" function
+        getline(getShopItem,line);
+        stringstream shopLine;
+        shopLine>>row>>col;
+        itemCount=row*col;
+        for (int i=0;i<itemCount;i++){
+            getline(getShopItem,line);
+            getline(getShopItem,pass);//the stat numbers that go with every item can be ignored
+            if (line[0]!='#') return;//if the item is not purchased than return
+        }
+    }
+    currentShopLevel++;//if the function was not returned then all items in the current shop level have been bought
+}
+//for (char i : line) { if (!(isdigit(i) || isspace(i))) return; }//if the character is part of a string(unpurchased item) return the fxn
+
 void removeShopItem(const string& itemName){ //-l
     string lines[shopFileLength];//create an array of strings to store shop lines -k
     {
         ifstream oldShop(shopFile);//open current shop file -l modified by -k
         string line; //-l
-        bool replaced = false, shopLevelCleared = true; //-l
+        bool replaced = false, shopLevelCleared = true; //-k
         int shopLevel = 0; //-l
         int i = -1; //for the array -k
         while (getline(oldShop, line)){//go over lines from old shop -k
@@ -259,13 +279,15 @@ void removeShopItem(const string& itemName){ //-l
         for (int i = 0; i < shopFileLength; i++)//dump the array into the new shop file -k
             newShop << lines[i] << "\n"; //-k
     }//ofstream automatically closes when out of scope -k
+
+    expandShop(); //-l
 }
 
 void enterDungeon(){//what happens in the dungeon -l
     char enterDungeon; //-k
     cout << "Welcome to the dungeon! Here you can fight enemies who can drop money and possibly extra supplies.\n"
             "You will fight three enemies, and then a boss fight for your rewards.\nYou will not be able to access the shop while in the dungeon\n"
-            "Be careful! You only have three hearts. Once all three are depleted, it's game over!\nDo you want to enter? (y/n): "; // -k
+            "Do you want to enter? (y/n): "; // -k
     cin >> enterDungeon; //-k
     if (tolower(enterDungeon) == 'n'){ //-k
         cout << "exiting the dungeon\n"; //-k
@@ -338,7 +360,6 @@ void recordEnemies(){ //-l
         enemyCounter++; //-k
     }
 }
-
 
 
 //const unsigned int easyLineLocation= getEnemyDifficultyLine("Easy"),mediumLineLocation= difficultyLine("Medium"),

@@ -3,29 +3,31 @@
 //cost, new max HP, new damage, new defense, healing points
 #shop 2 2
 Strong Dagger
-20 0 10
+20 0 10 0 0
 Health Potion
 5 0 0 0 30
 Item3
-4
+4 0 0 0 0
 Item4
-15
+15 0 0 0 0
 #shop 3 3
 Sword
-10
+10 0 0 0 0
 Item2
-1
+1 0 0 0 0
 Item3
-1
+2 0 0 0 0
 Item4
-1
+3 0 0 0 0
 Item5
-1
+4 0 0 0 0
 Item6
-1
+5 0 0 0 0
 Item7
-1
+6 0 0 0 0
 Item8
-1
-Item9
-1
+7 0 0 0 0
+Last Item
+8 0 0 0 0
+#eof
+#eof
