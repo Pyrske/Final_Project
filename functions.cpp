@@ -84,13 +84,13 @@ void playerAction(const string& input){ //-l
         return; //-k
     }
     if (input == "stats"){
-        playerStats();
-        return;
+        playerStats(); //-k
+        return; //-k
     }
-    if (input == "mines"){
-        cout << "Welcome to the mines! Here you can get money by typing a space\n";
-        currentLocation = mines;
-        return;
+    if (input == "mines"){ //-k
+        cout << "Welcome to the mines! Here you can get money by typing a space\n"; //-k
+        currentLocation = mines; //-k
+        return; //-k
     }
 }
 
@@ -104,10 +104,10 @@ bool addMoney(const string& input){ //-l
     return false; //-l
 }
 
-void playerStats(){
+void playerStats(){ //-k
     cout << "Your stats:\n- Health: " << maxHealth <<
          "\n- Weapon: " << weapon << " (" << damage << ")\n- Armor: " <<
-         armor << " (" << defense << ")\n";
+         armor << " (" << defense << ")\n"; //-k
 }
 
 bool changeLocation(const string& input){ //-l
@@ -157,7 +157,7 @@ void openShop() { //-l
                 getline(getShopItem, line);//gets next shop item from file -l
                 stringstream costLine(line); //-l
                 costLine >> cost;//splits line into name and cost -l
-                cout << setw(20); //-l modified by -k
+                cout << setw(25); //-l modified by -k
                 if (name == "#purchased") { //if the item is purchased, leave a sold message where the item usually goes -l modified by -k
                     cout << "-SOLD-"; //-k
                 } else { //-k
@@ -265,7 +265,8 @@ void enterDungeon(){//what happens in the dungeon -l
     char enterDungeon; //-k
     cout << "Welcome to the dungeon! Here you can fight enemies who can drop money and possibly extra supplies.\n"
             "You will fight three enemies, and then a boss fight for your rewards.\nYou will not be able to access the shop while in the dungeon\n"
-            "Be careful! You only have three hearts. Once all three are depleted, it's game over!\nDo you want to enter? (y/n): "; // -k
+            "Be careful! You only have 100 HP. Once it is depleted, it's game over!\nYou will not be able to leave once you enter.\n"
+            "Do you want to enter? (y/n): "; // -k
     cin >> enterDungeon; //-k
     if (tolower(enterDungeon) == 'n'){ //-k
         cout << "exiting the dungeon\n"; //-k
@@ -287,8 +288,6 @@ void enterDungeon(){//what happens in the dungeon -l
                 break; //-k
         }
     }
-
-
 }
 
 unsigned int difficultyLine(const string& difficulty){ //-l

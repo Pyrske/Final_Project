@@ -3,29 +3,48 @@
 //cost, new max HP, new damage, new defense, healing points
 #shop 2 2
 Strong Dagger
-20 0 10
-Health Potion
-5 0 0 0 30
-Item3
-4
-Item4
-15
+25 0 10 0 0
+Potion of Healing
+15 0 0 0 30
+Leather Armor
+45 0 0 10 0
+Potion of Healing
+15 0 0 0 30
 #shop 3 3
 Sword
-10
-Item2
-1
-Item3
-1
-Item4
-1
-Item5
-1
-Item6
-1
-Item7
-1
-Item8
-1
-Item9
-1
+75 0 25 0 0
+Potion of Healing
+15 0 0 0 30
+Strength Potion
+25 0 5 0 0
+Chainmail Armor
+65 0 0 25 0
+Potion of Healing
+15 0 0 0 30
+Strength Potion
+25 0 5 0 0
+Health Ring
+50 150 0 0 0
+Large Potion of Healing
+30 0 0 0 50
+Large Potion of Healing
+30 0 0 0 50
+#shop 3 3
+Ultimate Sword
+150 0 50 0 0
+Large Potion of Healing
+30 0 0 0 50
+Super Strength Potion
+60 0 15 0 0
+Steel Armor
+150 0 0 50 0
+Large Potion of Healing
+30 0 0 0 50
+Super Strength Potion
+60 0 15 0 0
+Health Amulet
+300 300 0 0 0
+Max Potion of Healing
+50 0 0 0 75
+Max Potion of Healing
+50 0 0 0 75

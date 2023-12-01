@@ -17,10 +17,14 @@ Bandit
 0 0 0 0 0
 Ghost
 0 0 0 0 0
-#B
+#B Vampire Lord
 0 0 0 0 0
 #difficulty
 Wizard
 0 0 0 0 0
 Giant Spider
+0 0 0 0 0
+Demon
+0 0 0 0 0
+#B Dragon
 0 0 0 0 0
