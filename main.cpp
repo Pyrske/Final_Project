@@ -1,6 +1,7 @@
 #include "header.h"
 #include "functions.cpp"
 
+//Do NOT terminate the debug/run instance early because it will not delete files that needed to be removed
 int main() {
     string userInput;
     startingText();

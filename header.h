@@ -20,6 +20,7 @@ bool changeLocation(const string& input);
 unsigned int getShopLength();
 void openShop();
 void buyItem();
+void expandShop();
 void removeShopItem(const string& itemName);
 void enterDungeon();
 void recordEnemies();
