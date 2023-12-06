@@ -228,10 +228,10 @@ void expandShop(){ //expands shop if all previous items are bought out -l
     ifstream getShopItem(shopFile);
     string line,name,pass;
     int row,col,itemCount;
-    for (int shopCount=0; shopCount<=currentShopLevel; shopCount++){//copied from "openShop" function
+    for (int shopCount=1; shopCount<=currentShopLevel; shopCount++){//modified from "openShop" function
         getline(getShopItem,line);
-        stringstream shopLine;
-        shopLine>>row>>col;
+        stringstream shopLine(line);
+        shopLine>>pass>>row>>col;
         itemCount=row*col;
         for (int i=0;i<itemCount;i++){
             getline(getShopItem,line);
@@ -307,6 +307,8 @@ void enterDungeon(){//what happens in the dungeon -l
             case 2: //hard difficulty -k
                 currentEnemy = hardEnemies[i]; //-k
                 break; //-k
+            default:
+                cerr<<"switch case out of range"<<endl;//-l
         }
     }
 
@@ -356,11 +358,9 @@ void recordEnemies(){ //-l
             case 2: //-k
                 hardEnemies[enemyCounter] = enemyString; //-k
                 break; //-k
+            default:
+                cerr<<"switch case out of range"<<endl;//-l
         }
         enemyCounter++; //-k
     }
 }
-
-
-//const unsigned int easyLineLocation= getEnemyDifficultyLine("Easy"),mediumLineLocation= difficultyLine("Medium"),
-//hardLineLocation= getEnemyDifficultyLine("Hard"),bossLineLocation= difficultyLine("Boss");
