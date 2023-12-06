@@ -5,6 +5,7 @@
 int main() {
     string userInput;
     startingText();
+    removeShop();
     makeShop();
     recordEnemies();
     while (getline(cin, userInput)){
@@ -14,6 +15,7 @@ int main() {
         }
         else{
             playerAction(userInput);
+            if (currentHealth <= 0) break;
         }
     }
 }

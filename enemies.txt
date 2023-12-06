@@ -2,7 +2,7 @@
 #difficulty
 Slime
 1 2 5 1 10
-//money; % chance of random item
+//health, attack, defense, coins, % chance of drop
 Zombie
 3 3 10 5 50
 Large Bat
