@@ -14,8 +14,7 @@ int main() {
             break;
         }
         else{
-            playerAction(userInput);
-            if (currentHealth <= 0) break;
+            if (!playerAction(userInput)) break;
         }
     }
 }

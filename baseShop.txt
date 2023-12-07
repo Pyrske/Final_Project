@@ -5,48 +5,47 @@
 Strong Dagger
 25 0 10 0 0
 Healing Potion (S)
-15 0 0 0 30
+15 0 0 0 1
 Leather Armor
 45 0 0 10 0
 Healing Potion (S)
-15 0 0 0 30
+15 0 0 0 1
 #shop 3 3
 Sword
 75 0 25 0 0
 Healing Potion (S)
-15 0 0 0 30
+15 0 0 0 1
 Strength Potion
 25 0 5 0 0
 Chainmail Armor
 65 0 0 25 0
 Healing Potion (S)
-15 0 0 0 30
+15 0 0 0 1
 Strength Potion
 25 0 5 0 0
 Health Ring
 50 150 0 0 0
 Healing Potion (M)
-30 0 0 0 50
+30 0 0 0 2
 Healing Potion (M)
-30 0 0 0 50
+30 0 0 0 2
 #shop 3 3
 Ultimate Sword
 150 0 50 0 0
 Healing Potion (M)
-30 0 0 0 50
+30 0 0 0 2
 Super Strength Potion
 60 0 15 0 0
 Steel Armor
 150 0 0 50 0
 Healing Potion (M)
-30 0 0 0 50
+30 0 0 0 2
 Super Strength Potion
 60 0 15 0 0
 Health Amulet
 300 300 0 0 0
 Healing Potion (L)
-50 0 0 0 75
+50 0 0 0 3
 Healing Potion (L)
-50 0 0 0 75
-#eof
+50 0 0 0 3
 #eof
