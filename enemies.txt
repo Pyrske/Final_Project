@@ -10,7 +10,7 @@ Large Bat
 #B Slime King
 10 15 50 100 100
 //all bosses are guaranteed one item, random chance is for another one
-#dificulty
+#difficulty
 Skeleton
 0 0 0 0 0
 Bandit
@@ -18,7 +18,7 @@ Bandit
 Ghost
 0 0 0 0 0
 #B Vampire Lord
-0 0 0 0 0
+0 0 0 0 100
 #difficulty
 Wizard
 0 0 0 0 0
@@ -27,4 +27,4 @@ Giant Spider
 Demon
 0 0 0 0 0
 #B Dragon
-0 0 0 0 0
+0 0 0 0 1000000

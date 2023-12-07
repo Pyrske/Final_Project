@@ -97,7 +97,7 @@ bool addMoney(const string& input){ //-l
 }
 
 void playerStats(){ //-k
-    cout << "Your stats:\n- Health: " << maxHealth <<
+    cout << "Weapons increase your attack\nArmor reduces damage taken\nYour stats:\n- Health: " << maxHealth <<
          "\n- Weapon: " << weapon << " (" << damage << ")\n- Armor: " <<
          armor << " (" << defense << ")\n"; //-k
 }
