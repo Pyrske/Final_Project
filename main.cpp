@@ -24,7 +24,7 @@
 int main() {
     string userInput;
     startingText();
-    removeShop();
+    removeShop(); //ensures shop gets reset
     makeShop();
     recordEnemies();
     while (getline(cin, userInput)){
