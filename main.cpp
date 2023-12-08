@@ -1,4 +1,4 @@
-//Author: Kalib Laclair and Liam Gugliotta
+//Author: Kalib LaClair and Liam Gugliotta
 //Class: CSI-140-06
 //Assignment: Final Project
 //Date Assigned: 11/06/2023

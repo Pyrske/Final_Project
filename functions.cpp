@@ -1,29 +1,35 @@
 //
 // Created by liamg on 10/31/2023.
-// Note: code marked with a -l is Liam's, and code marked with a -k is Kalib's
+// Note: all code after a mark with -l is Liam's, and all code after a mark with -k is Kalib's
 //
+//-l
 #include "header.h"
 
-unsigned long long int money = 0; //-l
-long long int baseMoneyAdd = 1200; //the base amount of money you will get by pressing space -k
+unsigned long long int money = 0;
+//-k
+long long int baseMoneyAdd = 1; //the base amount of money you will get by pressing space
 
-enum location { //locations -k
+enum location { //locations
     outside,
     mines,
     shop,
     dungeon
 };
-location currentLocation = outside; //-k
+location currentLocation = outside;
 
-int currentShopLevel = 1; //-l
-const string shopFile="shop.txt"; //-l
-const string enemyFile="enemies.txt"; //-l
-const unsigned int shopFileLength=getShopLength();//gets how many lines are in the shop file check with prof which method is better -l
+//-l
+int currentShopLevel = 1;
+const string shopFile="shop.txt";
+const string enemyFile="enemies.txt";
+const unsigned int shopFileLength=getShopLength();//gets how many lines are in the shop file check with prof which method is better
 
-int currentDifficulty = 0; // 0 is easy, 1 is medium, 2 is hard -k
-const unsigned int NUM_ALL_ENEMIES = 4; //-k
-string easyEnemies[NUM_ALL_ENEMIES], mediumEnemies[NUM_ALL_ENEMIES], hardEnemies[NUM_ALL_ENEMIES]; //-l modified my -k
+//-k
+int currentDifficulty = 0; // 0 is easy, 1 is medium, 2 is hard
+const unsigned int NUM_ALL_ENEMIES = 4;
+//-l
+string easyEnemies[NUM_ALL_ENEMIES], mediumEnemies[NUM_ALL_ENEMIES], hardEnemies[NUM_ALL_ENEMIES];
 
+//-k
 int damage = 5, defense = 0, maxHealth = 100, currentHealth = 100;
 string weapon = "Flimsy Dagger", armor = "none", accessory = "none";
 
@@ -33,74 +39,83 @@ int smallHealthPotionCount = 0, mediumHealthPotionCount = 0, largeHealthPotionCo
 const unsigned int SMALL_STRENGTH = 20, LARGE_STRENGTH = 40;
 int smallStrengthPotionCount = 0, largeStrengthPotionCount = 0;
 
-void startingText(){ //-k
+void startingText(){
     cout << "Welcome to the game, adventurer! From here you have a few choices:\n"
             "- Enter the mines by typing 'mines'\n"
             "- Enter the shop by typing 'shop'\n"
             "- Enter the dungeon by typing 'dungeon'\n"
             "- Check your inventory by typing 'inventory'\n"
-            "- Exit the game by typing 'exit'\n"; //-k
+            "- Exit the game by typing 'exit'\n";
 }
 
-void makeShop(){//pastes the original shop into the shop file -l
-    ifstream shopLines("baseShop.txt"); //-l
-    ofstream toFile(shopFile); //-l
-    string line; //-l
+//-l
+void makeShop(){//pastes the original shop into the shop file
+    ifstream shopLines("baseShop.txt");
+    ofstream toFile(shopFile);
+    string line;
 
-    while (getline(shopLines, line)){ //-l
-        if (line.rfind("//", 0) == 0) continue; //skip comments -k
-        toFile << line << "\n"; //-l
+    while (getline(shopLines, line)){
+        //-k
+        if (line.rfind("//", 0) == 0) continue; //skip comments
+        //-l
+        toFile << line << "\n";
     }
 }
 
-void removeShop(){//removes shop file before code ends so duplicate files don't appear after multiple runs -l
-    remove(shopFile.c_str()); //-l
+void removeShop(){//removes shop file before code ends so duplicate files don't appear after multiple runs
+    remove(shopFile.c_str());
 }
 
-bool playerAction(const string& input){ //-l
-    if (addMoney(input)) //-l
-        return true; //-l
-    if (input == "shop"){ //-l
-        currentLocation = shop; //-k
-        openShop(); //-l
-        return true; //-l
+bool playerAction(const string& input){
+    if (addMoney(input))
+        return true;
+    if (input == "shop"){
+        //-k
+        currentLocation = shop;
+        //-l
+        openShop();
+        return true;
     }
-    if (input == "buy"){ //-l modified by -k
-        if (currentLocation == shop) buyItem(); //-k
-        else cout << "You must be in the shop to buy items\n"; //-k
-        return true; //-k
+    //-l
+    if (input == "buy"){
+        //-k
+        if (currentLocation == shop) buyItem();
+        else cout << "You must be in the shop to buy items\n";
+        return true;
     }
-    if (input == "dungeon"){ //-k
-        currentLocation = dungeon; //-k
-        return enterDungeon(); //-k
+    if (input == "dungeon"){
+        currentLocation = dungeon;
+        return enterDungeon();
     }
     if (input == "inventory"){
-        playerInventory(); //-k
-        return true; //-k
+        playerInventory();
+        return true;
     }
-    if (input == "mines"){ //-k
-        cout << "Welcome to the mines! Here you can get money by typing a space\n"; //-k
-        currentLocation = mines; //-k
-        return true; //-k
+    if (input == "mines"){
+        cout << "Welcome to the mines! Here you can get money by typing a space\n";
+        currentLocation = mines;
+        return true;
     }
-    if (input == "ping"){//this is just a silly Easter egg -k
+    if (input == "ping"){//this is just a silly Easter egg
         cout << "pong!\n";
         return true;
     }
     return true;
 }
-
-bool addMoney(const string& input){ //-l
-    if (currentLocation != mines) return false; //-k
-    if (input.length() == 1 && isspace(input[0])){ //-l
-        money+=baseMoneyAdd; //-l
-        cout << "Total money: " << money << "\n"; //-l
-        return true; //-l
+//-l
+bool addMoney(const string& input){
+    //-k
+    if (currentLocation != mines) return false;
+    //-l
+    if (input.length() == 1 && isspace(input[0])){
+        money+=baseMoneyAdd;
+        cout << "Total money: " << money << "\n";
+        return true;
     }
-    return false; //-l
+    return false;
 }
-
-void playerInventory(){ //-k
+//-k
+void playerInventory(){
     cout << "Your inventory:\n- Money: " << money <<
          "\n- Accessory: " << accessory << " (" << maxHealth << " HP)\n- Weapon: "<<
          weapon << " (" << damage << ")\n- Armor: " <<
@@ -121,76 +136,89 @@ void playerInventory(){ //-k
     if (largeStrengthPotionCount > 0)
         cout << "- Large Strength Potion: " << largeStrengthPotionCount << "\n";
 }
-
-unsigned int getShopLength(){ //-l
-    ifstream shopLines("baseShop.txt"); //-l
-    string line; //-l
-    unsigned int counter=0; //-l
-    while (getline(shopLines, line)){ //-l
-        counter++; //-l
+//-l
+unsigned int getShopLength(){
+    ifstream shopLines("baseShop.txt");
+    string line;
+    unsigned int counter=0;
+    while (getline(shopLines, line)){
+        counter++;
     }
-    return counter; //-l
+    return counter;
 }
 
-void openShop() { //-l
-    ifstream getShopItem(shopFile); //-l
-    string line, start, item, name, cost; //-l
-    int rows,columns; //-l
-    cout << "Type 'buy' to purchase an item\nCurrent Shop Level: " << currentShopLevel << "\n"; //-k
-    for (int shopCount=1; shopCount<=min(currentShopLevel, currentDifficulty + 1); shopCount++){ //outputs the number of shops equal to their level -l
-        getline(getShopItem, line);//gets shop statement -l
-        stringstream ss(line); //-l
-        ss >> start >> rows >> columns; //separates the line into the "#shop", width and height -l
-        for (int currentRow=0; currentRow < rows; currentRow++){ //-l modified by -k
-            for (int currentCol=0; currentCol < columns; currentCol++) { //for the size of the shop print out appropriate names and spaces in the console modified by -k
-                getline(getShopItem, name);//gets next shop item from file -l
-                if (name=="#eof") return;//prevents endless loop of item costs -l
-                getline(getShopItem, line);//gets next shop item from file -l
-                stringstream costLine(line); //-l
-                costLine >> cost;//splits line into name and cost -l
-                cout << setw(25); //-l modified by -k
-                if (name == "#purchased") { //if the item is purchased, leave a sold message where the item usually goes -l modified by -k
-                    cout << "-SOLD-"; //-k
-                } else { //-k
-                    item = name + " (" + cost + ")"; //-k
-                    cout << item; //prints next item with space -k
+void openShop() {
+    ifstream getShopItem(shopFile);
+    string line, start, item, name, cost;
+    int rows,columns;
+    //-k
+    cout << "Type 'buy' to purchase an item\nCurrent Shop Level: " << currentShopLevel << "\n";
+    //-l
+    for (int shopCount=1; shopCount<=min(currentShopLevel, currentDifficulty + 1); shopCount++){ //outputs the number of shops equal to their level
+        getline(getShopItem, line);//gets shop statement
+        stringstream ss(line);
+        ss >> start >> rows >> columns; //separates the line into the "#shop", width and height
+        for (int currentRow=0; currentRow < rows; currentRow++){
+            //-k
+            for (int currentCol=0; currentCol < columns; currentCol++) { //for the size of the shop print out appropriate names and spaces in the console modified by
+                //-l
+                getline(getShopItem, name);//gets next shop item from file
+                if (name=="#eof") return;//prevents endless loop of item costs
+                getline(getShopItem, line);//gets next shop item from file
+                stringstream costLine(line);
+                costLine >> cost;//splits line into name and cost
+                cout << setw(25);
+                if (name == "#purchased") { //if the item is purchased, leave a sold message where the item usually goes
+                    //-k
+                    cout << "-SOLD-";
+                } else {
+                    item = name + " (" + cost + ")";
+                    cout << item; //prints next item with space
                 }
             }
-            cout << setw(0) << "\n"; //-k
+            cout << setw(0) << "\n";
         }
     }
 }
-
-void buyItem(){ //-l
-    ifstream getShopItem(shopFile); //-l
-    string itemToBuy,shopLine,itemName; //-l
-    int shopLevel=0,itemCost;//shop level starts at 0 b/c the first line of shop file adds one level -l
-    bool boughtItem=false; //-k
-    cout << "What item would you like to buy: "; //-l
-    getline(cin,itemToBuy); //gets item user would like to buy -l
-    if (itemToBuy[0] == '#'){ //-k
-        cout << "This item does not exist\n"; //-k
-        return; //-k
+//-l
+void buyItem(){
+    ifstream getShopItem(shopFile);
+    string itemToBuy,shopLine,itemName;
+    int shopLevel=0,itemCost;//shop level starts at 0 b/c the first line of shop file adds one level
+    //-k
+    bool boughtItem = false;
+    //-l
+    cout << "What item would you like to buy: ";
+    getline(cin,itemToBuy); //gets item user would like to buy
+    //-k
+    if (itemToBuy[0] == '#'){
+        cout << "This item does not exist\n";
+        return;
     }
-    while (getline(getShopItem, shopLine)){ //while there is a line to get from the file -l
-        if (shopLine.find("#shop") != string::npos){ //if the line that is being read is a shop header, continue and add one to the shop level -l
-            shopLevel++; //-l
-            continue; //-l
+    //-l
+    while (getline(getShopItem, shopLine)){ //while there is a line to get from the file
+        if (shopLine.find("#shop") != string::npos){ //if the line that is being read is a shop header, continue and add one to the shop level
+            shopLevel++;
+            continue;
         }
+        //-l
         itemName = shopLine;
         getline(getShopItem, shopLine);
         stringstream ss(shopLine);
+        //-k
         int newMaxHealth = 0, newDamage = 0, newDefense = 0, potionType = 0;
         ss >> itemCost >> newMaxHealth >> newDamage >> newDefense >> potionType;
-        if(itemToBuy == itemName) {//if the line in the txt file contains the name the user inputted -l modified by -k
-            if (shopLevel > currentShopLevel){//if the item is in a shop the user has not unlocked yet -l
-                cout << "The item you are trying to buy is in a locked shop\n"; //-l
-                break; //-l
+        //-l
+        if(itemToBuy == itemName) {//if the line in the txt file contains the name the user inputted
+            if (shopLevel > currentShopLevel){//if the item is in a shop the user has not unlocked yet
+                cout << "The item you are trying to buy is in a locked shop\n";
+                break;
             }
-            if (money >= itemCost) { //if the user has enough money to buy the item -l
-                money -= itemCost; //update money -l
-                boughtItem = true; //-l
-                removeShopItem(itemName); //removes item from the shop -l
+            if (money >= itemCost) { //if the user has enough money to buy the item
+                money -= itemCost; //update money
+                boughtItem = true;
+                removeShopItem(itemName); //removes item from the shop
+                //-k
                 if (newMaxHealth > maxHealth){
                     maxHealth = newMaxHealth;
                     accessory = itemName;
@@ -220,19 +248,21 @@ void buyItem(){ //-l
                         largeStrengthPotionCount++;
                         break;
                 }
-                cout << "You have bought " << itemName << "\nYou have " << money << " money remaining\n"; //-k
-                break; //-l
-            } else { //-k
-                cout << "You do not have enough money to buy this item\n"; //-k
-                break; //-k
+                cout << "You have bought " << itemName << "\nYou have " << money << " money remaining\n";
+                //-l
+                break;
+                //-k
+            } else {
+                cout << "You do not have enough money to buy this item\n";
+                break;
             }
         }
     }
-    if (!boughtItem) //-k
-        cout << "This item does not exist\n"; //-k
+    if (!boughtItem)
+        cout << "This item does not exist\n";
 }
-
-void expandShop(){ //expands shop if all previous items are bought out -l
+//-l
+void expandShop(){ //expands shop if all previous items are bought out
     ifstream getShopItem(shopFile);
     string line,name,pass;
     int row,col,itemCount;
@@ -251,120 +281,131 @@ void expandShop(){ //expands shop if all previous items are bought out -l
 }
 //for (char i : line) { if (!(isdigit(i) || isspace(i))) return; }//if the character is part of a string(unpurchased item) return the fxn
 
-void removeShopItem(const string& itemName){ //-l
-    string lines[shopFileLength];//create an array of strings to store shop lines -k
+void removeShopItem(const string& itemName){
+    //-k
+    string lines[shopFileLength];//create an array of strings to store shop lines
     {
-        ifstream oldShop(shopFile);//open current shop file -l modified by -k
-        string line; //-l
-        bool replaced = false, shopLevelCleared = true; //-k
-        int shopLevel = 0; //-l
-        int i = -1; //for the array -k
-        while (getline(oldShop, line)){//go over lines from old shop -k
-            i++; //-k
-            if (line.find("#shop") != string::npos){//check if line has #shop -k
-                if (shopLevelCleared && shopLevel == currentShopLevel)//check if previous shop level has been cleared and if the player is on that level -k
-                    currentShopLevel++; //-k
-                shopLevelCleared = true; //-k
-                lines[i] = line;//copy the current line to the array -k
-                shopLevel++; //-k
-                continue; //-k
+        //-l
+        ifstream oldShop(shopFile);//open current shop file
+        string line;
+        //-k
+        bool replaced = false, shopLevelCleared = true;
+        //-l
+        int shopLevel = 0;
+        //-k
+        int i = -1; //for the array
+        while (getline(oldShop, line)){//go over lines from old shop
+            i++;
+            if (line.find("#shop") != string::npos){//check if line has #shop
+                if (shopLevelCleared && shopLevel == currentShopLevel)//check if previous shop level has been cleared and if the player is on that level
+                    currentShopLevel++;
+                shopLevelCleared = true;
+                lines[i] = line;//copy the current line to the array
+                shopLevel++;
+                continue;
             }
-            if (line.find(itemName) != string::npos && !replaced){//check if line has the target item and if it has not been replaced -k
-                lines[i] = "#purchased";//tag item as purchased -k
-                replaced = true; //-k
-                continue; //-k
+            if (line.find(itemName) != string::npos && !replaced){//check if line has the target item and if it has not been replaced
+                lines[i] = "#purchased";//tag item as purchased
+                replaced = true;
+                continue;
             }
-            if (line.find("#purchased") == string::npos)//check if item hasn't been purchased -k
-                shopLevelCleared = false;//mark current level as not cleared -k
-            lines[i] = line; //-k
+            if (line.find("#purchased") == string::npos)//check if item hasn't been purchased
+                shopLevelCleared = false;//mark current level as not cleared
+            lines[i] = line;
             getline(oldShop, line);
             i++;
             lines[i] = line;
         }
-    }//ifstream automatically closes when out of scope -k
+    }//ifstream automatically closes when out of scope
     {
-        ofstream newShop(shopFile);//override existing shop file -k
-        for (int i = 0; i < shopFileLength; i++)//dump the array into the new shop file -k
-            newShop << lines[i] << "\n"; //-k
-    }//ofstream automatically closes when out of scope -k
-
-    expandShop(); //-l
+        ofstream newShop(shopFile);//override existing shop file
+        for (int i = 0; i < shopFileLength; i++)//dump the array into the new shop file
+            newShop << lines[i] << "\n";
+    }//ofstream automatically closes when out of scope
+    //-l
+    expandShop();
 }
 
-void recordEnemies(){ //-l
-    ifstream enemies(enemyFile); //-k
-    string line, enemyString, enemyStats; //-k
-    int difficultyCounter = -1, enemyCounter = 0; //-k
+void recordEnemies(){
+    //-k
+    ifstream enemies(enemyFile);
+    string line, enemyString, enemyStats;
+    int difficultyCounter = -1, enemyCounter = 0;
 
-    while (getline(enemies, line)) { //-k
-        if (line.rfind("//", 0) == 0) continue; //skip comments -k
+    while (getline(enemies, line)) {
+        if (line.rfind("//", 0) == 0) continue; //skip comments
 
-        if (line.find("#difficulty") != string::npos){ //-k
-            difficultyCounter++; //-k
-            enemyCounter = 0; //-k
-            continue; //-k
+        if (line.find("#difficulty") != string::npos){
+            difficultyCounter++;
+            enemyCounter = 0;
+            continue;
         }
         bool isBoss = false;
-        if (line.rfind("#B ", 0) == 0) { //-k
-            line.erase(0, 3); //-k
+        if (line.rfind("#B ", 0) == 0) {
+            line.erase(0, 3);
             isBoss = true;
         }
-        enemyString = line; //-k
-        getline(enemies, enemyStats); //-k
-        enemyString += "\n" + enemyStats; //-k
+        enemyString = line;
+        getline(enemies, enemyStats);
+        enemyString += "\n" + enemyStats;
         int index = enemyCounter;
         if (isBoss){
             index = NUM_ALL_ENEMIES - 1;
         }
-        switch (difficultyCounter){ //-k
-            case 0: //-k
-                easyEnemies[index] = enemyString; //-k
-                break; //-k
-            case 1: //-k
-                mediumEnemies[index] = enemyString; //-k
-                break; //-k
-            case 2: //-k
-                hardEnemies[index] = enemyString; //-k
-                break; //-k
+        switch (difficultyCounter){
+            case 0:
+                easyEnemies[index] = enemyString;
+                break;
+            case 1:
+                mediumEnemies[index] = enemyString;
+                break;
+            case 2:
+                hardEnemies[index] = enemyString;
+                break;
+                //-l
             default:
-                cerr << "switch case out of range\n"; //-l
+                cerr << "switch case out of range\n";
         }
-        if (!isBoss) enemyCounter++; //-k
+        //-k
+        if (!isBoss) enemyCounter++;
     }
 }
-
-bool enterDungeon(){//what happens in the dungeon -l
+//-l
+bool enterDungeon(){//what happens in the dungeon
+    //-k
     currentHealth = maxHealth;
     cout << "Welcome to the dungeon! Here you can fight enemies who can drop money and possibly extra supplies.\n"
             "You will fight three enemies, and then a boss fight for your rewards.\nYou will not be able to access the shop while in the dungeon\n"
             "Be careful! You only have " << maxHealth << " HP. Once it is depleted, it's game over!\nYou will not be able to leave once you enter.\n"
-            "Do you want to enter? (y/n): "; // -k
-    string userEnter; //-k
-    getline(cin, userEnter); //-k
-    if (tolower(userEnter[0]) == 'n'){ //-k
-        cout << "exiting the dungeon\n"; //-k
-        return true; //-k
-    }
-    if (tolower(userEnter[0]) != 'y') { //-k
-        cout << "improper input"; //-k
+            "Do you want to enter? (y/n): ";
+    string userEnter;
+    getline(cin, userEnter);
+    if (tolower(userEnter[0]) == 'n'){
+        cout << "exiting the dungeon\n";
         return true;
     }
-    for (int i = 0; i < NUM_ALL_ENEMIES; i++){ //-k
-        string currentEnemy; //-k
-        switch(currentDifficulty){ //-k
-            case 0: //easy difficulty -k
-                currentEnemy = easyEnemies[i]; //-k
-                break; //-k
-            case 1: //medium difficulty -k
-                currentEnemy = mediumEnemies[i]; //-k
-                break; //-k
-            case 2: //hard difficulty -k
-                currentEnemy = hardEnemies[i]; //-k
-                break; //-k
+    if (tolower(userEnter[0]) != 'y') {
+        cout << "improper input";
+        return true;
+    }
+    for (int i = 0; i < NUM_ALL_ENEMIES; i++){
+        string currentEnemy;
+        switch(currentDifficulty){
+            case 0: //easy difficulty
+                currentEnemy = easyEnemies[i];
+                break;
+            case 1: //medium difficulty
+                currentEnemy = mediumEnemies[i];
+                break;
+            case 2: //hard difficulty
+                currentEnemy = hardEnemies[i];
+                break;
+                //-l
             default:
-                cerr<<"switch case out of range"<<endl;//-l
+                cerr << "switch case out of range" << endl;
         }
-        if (!enterBattle(currentEnemy, currentDifficulty, i == NUM_ALL_ENEMIES - 1)) return false; //check if the player died or exited during battle -k
+        //-k
+        if (!enterBattle(currentEnemy, currentDifficulty, i == NUM_ALL_ENEMIES - 1)) return false; //check if the player died or exited during battle
     }
     currentDifficulty++;
     if (currentDifficulty > 2) {
@@ -393,9 +434,9 @@ bool enterBattle(const string &enemyString, int enemyDifficulty, bool isBoss){
                     "- Type 'att' to attack\n"
                     "- Type 'use' to use a potion\n";
 
-    while (enemyHealth > 0 && currentHealth > 0){ //battle loop -k
+    while (enemyHealth > 0 && currentHealth > 0){ //battle loop
         cout << "You: " << currentHealth << " / " << maxHealth << "\n" << name << ": " << enemyHealth << " / " << enemyMaxHealth << "\n";
-        //player's turn -k
+        //player's turn
         while (true){
             getline(cin, userInput);
             if (userInput == "exit") return false;
@@ -460,7 +501,7 @@ bool enterBattle(const string &enemyString, int enemyDifficulty, bool isBoss){
             break;
         }
         if (enemyHealth <= 0) break;
-        //enemy's turn -k
+        //enemy's turn
         totalDamage = max(enemyDamage - (rand() % (defense + 1)), 0);
         currentHealth -= totalDamage;
         cout << name << " dealt " << totalDamage << " damage to you\n";
