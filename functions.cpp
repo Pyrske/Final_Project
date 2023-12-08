@@ -29,8 +29,9 @@ char currentDifficulty = 0; // 0 is easy, 1 is medium, 2 is hard -k
 const unsigned int NUM_ALL_ENEMIES = 4; //-k
 string easyEnemies[NUM_ALL_ENEMIES], mediumEnemies[NUM_ALL_ENEMIES], hardEnemies[NUM_ALL_ENEMIES]; //-l modified my -k
 
-int damage = 5, defense = 0, maxHealth = 100;
+int damage = 5, defense = 0, maxHealth = 100, currentHealth = 100;
 string weapon = "Flimsy Dagger", armor = "none";
+char smallPotionCount = 0, mediumPotionCount = 0, largePotionCount = 0;
 
 void startingText(){ //-k
     cout << "Welcome to the game, adventurer! From here you have a few choices:\n"
@@ -59,15 +60,6 @@ void removeShop(){//removes shop file before code ends so duplicate files don't 
 void playerAction(const string& input){ //-l
     if (addMoney(input)) //-l
         return; //-l
-//    if (input == "location"){
-//        inShop = false;
-//        changeLocation(input);
-//        switch (playerLocation) {
-//            case 0:
-//                //put code to return player back to the mines area
-//                break;
-//        }
-//    }
     if (input == "shop"){ //-l
         currentLocation = shop; //-k
         openShop(); //-l
@@ -105,31 +97,9 @@ bool addMoney(const string& input){ //-l
 }
 
 void playerStats(){ //-k
-    cout << "Your stats:\n- Health: " << maxHealth <<
+    cout << "Weapons increase your attack\nArmor reduces damage taken\nYour stats:\n- Health: " << maxHealth <<
          "\n- Weapon: " << weapon << " (" << damage << ")\n- Armor: " <<
          armor << " (" << defense << ")\n"; //-k
-}
-
-bool changeLocation(const string& input){ //-l
-//    string newLocation; //-l
-//    cout << "Current Location: " << playerLocation << "\n" << "Where would you like to go? "; //-l modified slightly by -k
-//    cin >> newLocation; //-l
-//    cout << "\n"; //-l
-//
-//    for (char i : input){ //loops through chars in the string, making all characters lowercase -l
-//        if (i>=65 && i<=90) //-l
-//            i+=32; //-l
-//    }
-//    if (input == newLocation)//if player is trying to go to a place where they already are -l
-//        return false; //-l
-//    for (const string& location : possibleLocations){ //loops through the possible locations, setting the new player location to user inputted if it is a possible location to travel to -l
-//        if (location  ==  input){ //-l
-//            playerLocation = location; //-l
-//            cout << "New Location: " << playerLocation << "\n"; //tells player their new location -l
-//            return true; //add statement that triggers depending on what location they are now in -l
-//        }
-//    }
-    return false; //-l
 }
 
 unsigned int getShopLength(){ //-l
@@ -284,11 +254,12 @@ void removeShopItem(const string& itemName){ //-l
 }
 
 void enterDungeon(){//what happens in the dungeon -l
-    char enterDungeon; //-k
+    currentHealth = maxHealth;
     cout << "Welcome to the dungeon! Here you can fight enemies who can drop money and possibly extra supplies.\n"
             "You will fight three enemies, and then a boss fight for your rewards.\nYou will not be able to access the shop while in the dungeon\n"
             "Be careful! You only have 100 HP. Once it is depleted, it's game over!\nYou will not be able to leave once you enter.\n"
             "Do you want to enter? (y/n): "; // -k
+    char enterDungeon; //-k
     cin >> enterDungeon; //-k
     if (tolower(enterDungeon) == 'n'){ //-k
         cout << "exiting the dungeon\n"; //-k
@@ -311,20 +282,8 @@ void enterDungeon(){//what happens in the dungeon -l
             default:
                 cerr<<"switch case out of range"<<endl;//-l
         }
+        if (!enterBattle(currentEnemy, currentDifficulty)) break;
     }
-}
-
-unsigned int difficultyLine(const string& difficulty){ //-l
-    string line; //-l
-    unsigned int counter=0; //-l
-    ifstream fin(enemyFile); //-l
-    while(getline(fin, line)){ //-l
-        counter++; //-l
-        if (line.find(difficulty)!=string::npos) { //-l
-            break; //-l
-        }
-    }
-    return counter; //-l
 }
 
 void recordEnemies(){ //-l
@@ -362,4 +321,44 @@ void recordEnemies(){ //-l
         }
         enemyCounter++; //-k
     }
+}
+
+bool enterBattle(const string &enemyString, int enemyDifficulty){
+    string name;
+    int enemyHealth, enemyDamage, enemyDefence, coins, percentChance;
+    stringstream enemy(enemyString);
+    getline(enemy, name);
+    enemy >> enemyHealth >> enemyDamage >> enemyDefence >> coins >> percentChance;
+    cout << "You come across a " << name << ". What will you do?\n"
+                                            "- Type 'att' to enemyDamage\n"
+                                            "- Type 'use' to use a potion\n";
+    while (enemyHealth > 0 && currentHealth > 0){
+
+    }
+    if (enemyHealth <= 0){
+        cout << "You defeated the " << name << "! You have received " << coins << " coins.\n";
+        money += coins;
+        char currentPercent = rand() % 100;
+        if (currentPercent < percentChance){
+            string potionSize;
+            switch (enemyDifficulty){
+                case 0:
+                    potionSize = "S";
+                    smallPotionCount++;
+                    break;
+                case 1:
+                    potionSize = "M";
+                    mediumPotionCount++;
+                    break;
+                case 2:
+                    potionSize = "L";
+                    largePotionCount++;
+                    break;
+            }
+            cout << "You got a Health Potion (" << potionSize << ")!";
+        }
+        return true;
+    }
+    cout << "You died!\nGame Over\n";
+    return false;
 }

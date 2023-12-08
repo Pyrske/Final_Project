@@ -14,9 +14,7 @@ using namespace std;
 void makeShop();
 void removeShop();
 bool addMoney(const string& input);
-string findLocation(const string& input);
 void playerAction(const string& input);
-bool changeLocation(const string& input);
 unsigned int getShopLength();
 void openShop();
 void buyItem();
@@ -28,3 +26,4 @@ void recordEnemies();
 //functions made by -k:
 void startingText();
 void playerStats();
+bool enterBattle(const string &enemyString, int enemyDifficulty);
