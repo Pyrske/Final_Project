@@ -26,4 +26,4 @@ void recordEnemies();
 //functions made by -k:
 void startingText();
 void playerInventory();
-bool enterBattle(const string &enemyString, int enemyDifficulty);
+bool enterBattle(const string &enemyString, int enemyDifficulty, bool isBoss);

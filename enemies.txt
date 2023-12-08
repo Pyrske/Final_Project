@@ -4,27 +4,27 @@ Slime
 15 10 0 10 10
 //health, attack, defense, coins, % chance of drop
 Zombie
-35 20 3 10 20
+25 17 3 10 20
 Large Bat
-25 15 5 10 15
-#B Slime King
-50 30 10 100 100
-//all bosses are guaranteed one item, random chance is for another one
+20 15 5 10 15
+#B The Slime King
+40 20 8 100 100
+//all bosses are guaranteed one item
 #difficulty
 Skeleton
-75 25 8 35 10
+60 20 10 35 10
 Bandit
-100 35 6 35 20
+80 22 8 35 20
 Ghost
-125 30 10 35 15
-#B Vampire Lord
-200 45 35 400 100
+90 25 13 35 15
+#B The Vampire Lord
+120 30 20 400 100
 #difficulty
 Wizard
-150 80 20 150 10
+125 35 14 150 10
 Giant Spider
-250 50 50 150 20
+155 36 21 150 20
 Demon
-300 65 30 150 15
-#B Dragon
-400 100 50 1000000 100
+175 44 16 150 15
+#B The Dragon
+300 64 25 1000000 100

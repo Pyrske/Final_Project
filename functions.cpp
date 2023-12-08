@@ -6,7 +6,6 @@
 
 unsigned long long int money = 0; //-l
 long long int baseMoneyAdd = 1200; //the base amount of money you will get by pressing space -k
-int currentShopLevel = 1; //-l
 
 enum location { //locations -k
     outside,
@@ -16,18 +15,23 @@ enum location { //locations -k
 };
 location currentLocation = outside; //-k
 
+int currentShopLevel = 1; //-l
 const string shopFile="shop.txt"; //-l
 const string enemyFile="enemies.txt"; //-l
 const unsigned int shopFileLength=getShopLength();//gets how many lines are in the shop file check with prof which method is better -l
-char currentDifficulty = 0; // 0 is easy, 1 is medium, 2 is hard -k
+
+int currentDifficulty = 0; // 0 is easy, 1 is medium, 2 is hard -k
 const unsigned int NUM_ALL_ENEMIES = 4; //-k
 string easyEnemies[NUM_ALL_ENEMIES], mediumEnemies[NUM_ALL_ENEMIES], hardEnemies[NUM_ALL_ENEMIES]; //-l modified my -k
 
 int damage = 5, defense = 0, maxHealth = 100, currentHealth = 100;
-string weapon = "Flimsy Dagger", armor = "none";
+string weapon = "Flimsy Dagger", armor = "none", accessory = "none";
 
 const unsigned int SMALL_HEALING = 25, MEDIUM_HEALING = 50, LARGE_HEALING = 75;
-int smallPotionCount = 0, mediumPotionCount = 0, largePotionCount = 0;
+int smallHealthPotionCount = 0, mediumHealthPotionCount = 0, largeHealthPotionCount = 0;
+
+const unsigned int SMALL_STRENGTH = 20, LARGE_STRENGTH = 40;
+int smallStrengthPotionCount = 0, largeStrengthPotionCount = 0;
 
 void startingText(){ //-k
     cout << "Welcome to the game, adventurer! From here you have a few choices:\n"
@@ -79,6 +83,10 @@ bool playerAction(const string& input){ //-l
         currentLocation = mines; //-k
         return true; //-k
     }
+    if (input == "ping"){//this is just a silly Easter egg -k
+        cout << "pong!\n";
+        return true;
+    }
     return true;
 }
 
@@ -93,20 +101,25 @@ bool addMoney(const string& input){ //-l
 }
 
 void playerInventory(){ //-k
-    cout << "Your inventory:\n- Health: " << maxHealth <<
-         "\n- Weapon: " << weapon << " (" << damage << ")\n- Armor: " <<
+    cout << "Your inventory:\n- Money: " << money <<
+         "\n- Accessory: " << accessory << " (" << maxHealth << " HP)\n- Weapon: "<<
+         weapon << " (" << damage << ")\n- Armor: " <<
          armor << " (" << defense << ")\n";
-    if (smallPotionCount + mediumPotionCount + largePotionCount <= 0){
+    if (smallHealthPotionCount + mediumHealthPotionCount + largeHealthPotionCount + smallStrengthPotionCount + largeStrengthPotionCount <= 0){
         cout << "You have no potions\n";
         return;
     }
     cout << "Your potions:\n";
-    if (smallPotionCount > 0)
-        cout << "- Small Healing Potion: " << smallPotionCount << "\n";
-    if (mediumPotionCount > 0)
-        cout << "- Medium Healing Potion: " << mediumPotionCount << "\n";
-    if (largePotionCount > 0)
-        cout << "- Large Healing Potion: " << largePotionCount << "\n";
+    if (smallHealthPotionCount > 0)
+        cout << "- Small Healing Potion: " << smallHealthPotionCount << "\n";
+    if (mediumHealthPotionCount > 0)
+        cout << "- Medium Healing Potion: " << mediumHealthPotionCount << "\n";
+    if (largeHealthPotionCount > 0)
+        cout << "- Large Healing Potion: " << largeHealthPotionCount << "\n";
+    if (smallStrengthPotionCount > 0)
+        cout << "- Small Strength Potion: " << smallStrengthPotionCount << "\n";
+    if (largeStrengthPotionCount > 0)
+        cout << "- Large Strength Potion: " << largeStrengthPotionCount << "\n";
 }
 
 unsigned int getShopLength(){ //-l
@@ -124,7 +137,7 @@ void openShop() { //-l
     string line, start, item, name, cost; //-l
     int rows,columns; //-l
     cout << "Type 'buy' to purchase an item\nCurrent Shop Level: " << currentShopLevel << "\n"; //-k
-    for (int shopCount=1; shopCount<=currentShopLevel; shopCount++){ //outputs the number of shops equal to their level -l
+    for (int shopCount=1; shopCount<=min(currentShopLevel, currentDifficulty + 1); shopCount++){ //outputs the number of shops equal to their level -l
         getline(getShopItem, line);//gets shop statement -l
         stringstream ss(line); //-l
         ss >> start >> rows >> columns; //separates the line into the "#shop", width and height -l
@@ -180,6 +193,7 @@ void buyItem(){ //-l
                 removeShopItem(itemName); //removes item from the shop -l
                 if (newMaxHealth > maxHealth){
                     maxHealth = newMaxHealth;
+                    accessory = itemName;
                 }
                 if (newDamage > damage){
                     damage = newDamage;
@@ -191,13 +205,19 @@ void buyItem(){ //-l
                 }
                 switch (potionType){
                     case 1:
-                        smallPotionCount++;
+                        smallHealthPotionCount++;
                         break;
                     case 2:
-                        mediumPotionCount++;
+                        mediumHealthPotionCount++;
                         break;
                     case 3:
-                        largePotionCount++;
+                        largeHealthPotionCount++;
+                        break;
+                    case 4:
+                        smallStrengthPotionCount++;
+                        break;
+                    case 5:
+                        largeStrengthPotionCount++;
                         break;
                 }
                 cout << "You have bought " << itemName << "\nYou have " << money << " money remaining\n"; //-k
@@ -271,43 +291,6 @@ void removeShopItem(const string& itemName){ //-l
     expandShop(); //-l
 }
 
-bool enterDungeon(){//what happens in the dungeon -l
-    currentHealth = maxHealth;
-    cout << "Welcome to the dungeon! Here you can fight enemies who can drop money and possibly extra supplies.\n"
-            "You will fight three enemies, and then a boss fight for your rewards.\nYou will not be able to access the shop while in the dungeon\n"
-            "Be careful! You only have " << maxHealth << " HP. Once it is depleted, it's game over!\nYou will not be able to leave once you enter.\n"
-            "Do you want to enter? (y/n): "; // -k
-    string userEnter; //-k
-    getline(cin, userEnter); //-k
-    if (tolower(userEnter[0]) == 'n'){ //-k
-        cout << "exiting the dungeon\n"; //-k
-        return true; //-k
-    }
-    if (tolower(userEnter[0]) != 'y') { //-k
-        cout << "improper input"; //-k
-        return true;
-    }
-    for (int i = 0; i < 3; i++){ //-k
-        string currentEnemy; //-k
-        switch(currentDifficulty){ //-k
-            case 0: //easy difficulty -k
-                currentEnemy = easyEnemies[i]; //-k
-                break; //-k
-            case 1: //medium difficulty -k
-                currentEnemy = mediumEnemies[i]; //-k
-                break; //-k
-            case 2: //hard difficulty -k
-                currentEnemy = hardEnemies[i]; //-k
-                break; //-k
-            default:
-                cerr<<"switch case out of range"<<endl;//-l
-        }
-        if (!enterBattle(currentEnemy, currentDifficulty)) return false; //check if the player died or exited during battle -k
-    }
-    currentDifficulty++;
-    return true;
-}
-
 void recordEnemies(){ //-l
     ifstream enemies(enemyFile); //-k
     string line, enemyString, enemyStats; //-k
@@ -350,58 +333,120 @@ void recordEnemies(){ //-l
     }
 }
 
-bool enterBattle(const string &enemyString, int enemyDifficulty){
+bool enterDungeon(){//what happens in the dungeon -l
+    currentHealth = maxHealth;
+    cout << "Welcome to the dungeon! Here you can fight enemies who can drop money and possibly extra supplies.\n"
+            "You will fight three enemies, and then a boss fight for your rewards.\nYou will not be able to access the shop while in the dungeon\n"
+            "Be careful! You only have " << maxHealth << " HP. Once it is depleted, it's game over!\nYou will not be able to leave once you enter.\n"
+            "Do you want to enter? (y/n): "; // -k
+    string userEnter; //-k
+    getline(cin, userEnter); //-k
+    if (tolower(userEnter[0]) == 'n'){ //-k
+        cout << "exiting the dungeon\n"; //-k
+        return true; //-k
+    }
+    if (tolower(userEnter[0]) != 'y') { //-k
+        cout << "improper input"; //-k
+        return true;
+    }
+    for (int i = 0; i < NUM_ALL_ENEMIES; i++){ //-k
+        string currentEnemy; //-k
+        switch(currentDifficulty){ //-k
+            case 0: //easy difficulty -k
+                currentEnemy = easyEnemies[i]; //-k
+                break; //-k
+            case 1: //medium difficulty -k
+                currentEnemy = mediumEnemies[i]; //-k
+                break; //-k
+            case 2: //hard difficulty -k
+                currentEnemy = hardEnemies[i]; //-k
+                break; //-k
+            default:
+                cerr<<"switch case out of range"<<endl;//-l
+        }
+        if (!enterBattle(currentEnemy, currentDifficulty, i == NUM_ALL_ENEMIES - 1)) return false; //check if the player died or exited during battle -k
+    }
+    currentDifficulty++;
+    if (currentDifficulty > 2) {
+        cout << "Congratulations! You have beaten the game!\nWe know it was short but we hope you enjoyed it.\nType 'yay!' to end the game\n";
+        string endGame;
+        while (endGame != "yay!")
+            getline(cin, endGame);
+        return false;
+    }
+    return true;
+}
+
+bool enterBattle(const string &enemyString, int enemyDifficulty, bool isBoss){
     string name, userInput;
-    int enemyHealth, enemyDamage, enemyDefence, coins, percentChance, enemyMaxHealth, totalDamage;
+    int enemyHealth, enemyDamage, enemyDefence, coins, percentChance, enemyMaxHealth, totalDamage, battleStrength = 0;
     stringstream enemy(enemyString);
     getline(enemy, name);
     enemy >> enemyHealth >> enemyDamage >> enemyDefence >> coins >> percentChance;
     enemyMaxHealth = enemyHealth;
-    cout << "\nYou come across a " << name << ". What will you do?\n"
-                                            "- Type 'att' to attack\n"
-                                            "- Type 'use' to use a potion\n";
+    if (isBoss){
+        cout << "You face the boss of this dungeon, ";
+    }else{
+        cout << "\nYou come across a ";
+    }
+    cout << name << ". What will you do?\n"
+                    "- Type 'att' to attack\n"
+                    "- Type 'use' to use a potion\n";
 
     while (enemyHealth > 0 && currentHealth > 0){ //battle loop -k
         cout << "You: " << currentHealth << " / " << maxHealth << "\n" << name << ": " << enemyHealth << " / " << enemyMaxHealth << "\n";
-        while (true){ //player's turn -k
+        //player's turn -k
+        while (true){
             getline(cin, userInput);
             if (userInput == "exit") return false;
             if (userInput == "att"){
-                totalDamage = max(damage - (rand() % (enemyDefence + 1)), 0);
+                totalDamage = max(damage + battleStrength - (rand() % (enemyDefence + 1)), 0);
                 enemyHealth -= totalDamage;
-                cout << "Dealt " << totalDamage << " damage\n";
+                cout << "You dealt " << totalDamage << " damage to " << name << "\n";
             } else if (userInput == "use"){
-                if (smallPotionCount + mediumPotionCount + largePotionCount <= 0){
+                if (smallHealthPotionCount + mediumHealthPotionCount + largeHealthPotionCount + smallStrengthPotionCount + largeStrengthPotionCount <= 0){
                     cout << "You have no potions to use\n";
                     continue;
                 }
                 cout << "What would you like to use?\n";
-                if (smallPotionCount > 0)
-                    cout << "1 - Small Healing Potion (" << smallPotionCount << ")\n";
-                if (mediumPotionCount > 0)
-                    cout << "2 - Medium Healing Potion (" << mediumPotionCount << ")\n";
-                if (largePotionCount > 0)
-                    cout << "3 - Large Healing Potion (" << largePotionCount << ")\n";
+                if (smallHealthPotionCount > 0)
+                    cout << "1 - Small Healing Potion (" << smallHealthPotionCount << ")\n";
+                if (mediumHealthPotionCount > 0)
+                    cout << "2 - Medium Healing Potion (" << mediumHealthPotionCount << ")\n";
+                if (largeHealthPotionCount > 0)
+                    cout << "3 - Large Healing Potion (" << largeHealthPotionCount << ")\n";
+                if (smallStrengthPotionCount > 0)
+                    cout << "4 - Small Strength Potion (" << smallStrengthPotionCount << ")\n";
+                if (largeStrengthPotionCount > 0)
+                    cout << "5 - Large Strength Potion (" << largeStrengthPotionCount << ")\n";
                 while (true) {
                     getline(cin, userInput);
                     if (userInput == "1") {
                         currentHealth += SMALL_HEALING;
                         if (currentHealth > maxHealth)
                             currentHealth = maxHealth;
-                        smallPotionCount--;
+                        smallHealthPotionCount--;
                         cout << " You used a Small Healing Potion and recovered " << SMALL_HEALING << " HP\n";
                     } else if (userInput == "2") {
                         currentHealth += MEDIUM_HEALING;
                         if (currentHealth > maxHealth)
                             currentHealth = maxHealth;
-                        mediumPotionCount--;
+                        mediumHealthPotionCount--;
                         cout << " You used a Medium Healing Potion and recovered " << MEDIUM_HEALING << " HP\n";
                     } else if (userInput == "3") {
                         currentHealth += LARGE_HEALING;
                         if (currentHealth > maxHealth)
                             currentHealth = maxHealth;
-                        largePotionCount--;
+                        largeHealthPotionCount--;
                         cout << " You used a Large Healing Potion and recovered " << LARGE_HEALING << " HP\n";
+                    } else if (userInput == "4") {
+                        battleStrength += SMALL_STRENGTH;
+                        smallStrengthPotionCount--;
+                        cout << " You used a Small Strength Potion and increased your strength by " << SMALL_STRENGTH << "\n";
+                    } else if (userInput == "5") {
+                        battleStrength += LARGE_STRENGTH;
+                        largeStrengthPotionCount--;
+                        cout << " You used a Large Strength Potion and increased your strength by " << LARGE_STRENGTH << "\n";
                     } else {
                         cout << "Invalid input\n";
                         continue;
@@ -415,10 +460,17 @@ bool enterBattle(const string &enemyString, int enemyDifficulty){
             break;
         }
         if (enemyHealth <= 0) break;
-
+        //enemy's turn -k
+        totalDamage = max(enemyDamage - (rand() % (defense + 1)), 0);
+        currentHealth -= totalDamage;
+        cout << name << " dealt " << totalDamage << " damage to you\n";
     }
     if (enemyHealth <= 0){
-        cout << "You defeated the " << name << "! You have received " << coins << " coins.\n";
+        if (isBoss)
+            cout << "You defeated the boss, " << name << ", and completed the dungeon!\nNew items are now available in the shop";
+        else
+            cout << "You defeated the " << name;
+        cout << "\nYou have received " << coins << " coins.\n";
         money += coins;
         char currentPercent = rand() % 100;
         if (currentPercent < percentChance){
@@ -426,19 +478,20 @@ bool enterBattle(const string &enemyString, int enemyDifficulty){
             switch (enemyDifficulty){
                 case 0:
                     potionSize = "S";
-                    smallPotionCount++;
+                    smallHealthPotionCount++;
                     break;
                 case 1:
                     potionSize = "M";
-                    mediumPotionCount++;
+                    mediumHealthPotionCount++;
                     break;
                 case 2:
                     potionSize = "L";
-                    largePotionCount++;
+                    largeHealthPotionCount++;
                     break;
             }
-            cout << "You got a Health Potion (" << potionSize << ")!";
+            cout << "You got a Health Potion (" << potionSize << ")!\n";
         }
+        cout << "\n";
         return true;
     }
     cout << "You died!\nGame Over\n";
