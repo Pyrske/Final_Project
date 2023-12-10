@@ -264,7 +264,7 @@ void buyItem() {
                 //-k
             } else {
                 cout << "You do not have enough money to buy this item\n";
-                break;
+                return;//break also causes "This item does not exist" to cout
             }
         }
     }
