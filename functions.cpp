@@ -437,6 +437,7 @@ bool enterDungeon() {//what happens in the dungeon
     return true;
 }
 
+//-k
 bool enterBattle(const string &enemyString, int enemyDifficulty, bool isBoss) {
     string name, userInput;
     int enemyHealth, enemyDamage, enemyDefence, coins, percentChance, enemyMaxHealth, totalDamage, battleStrength = 0;
