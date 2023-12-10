@@ -264,7 +264,7 @@ void buyItem() {
                 //-k
             } else {
                 cout << "You do not have enough money to buy this item\n";
-                break;
+                return;//break also causes "This item does not exist" to cout
             }
         }
     }
@@ -437,6 +437,7 @@ bool enterDungeon() {//what happens in the dungeon
     return true;
 }
 
+//-k
 bool enterBattle(const string &enemyString, int enemyDifficulty, bool isBoss) {
     string name, userInput;
     int enemyHealth, enemyDamage, enemyDefence, coins, percentChance, enemyMaxHealth, totalDamage, battleStrength = 0;
